@@ -5,7 +5,7 @@ class plxMyAutoMetaDescription extends plxPlugin {
 	/**
 	 * Constructeur de la classe
 	 *
-	 * @param	default_lang	langue par dÈfaut utilisÈe par PluXml
+	 * @param	default_lang	langue par d√©faut utilis√©e par PluXml
 	 * @return	null
 	 * @author	Stephane F
 	 **/
@@ -14,40 +14,42 @@ class plxMyAutoMetaDescription extends plxPlugin {
 		# Appel du constructeur de la classe plxPlugin (obligatoire)
 		parent::__construct($default_lang);
 
-		# droits pour accËder ‡ la page config.php du plugin
+		# droits pour acc√®der √† la page config.php du plugin
 		$this->setConfigProfil(PROFIL_ADMIN);
 
-		# DÈclarations des hooks
+		# D√©clarations des hooks
 		$this->addHook('plxShowMeta', 'plxShowMeta');
 
 	}
 
 	/**
-	 * MÈthode qui extrait n mots dans une chaine de caractËres
+	 * M√©thode qui extrait n mots dans une chaine de caract√®res
 	 *
-	 * @param 	$string 	chaine ‡ couper
-	 * @param 	$len 		nombre de mots ‡ garder
-	 * @param 	$ending 	caractËres de fin
-	 * @param 	$char 		caractËre de sÈparation
+	 * @param 	$string 	chaine √† couper
+	 * @param 	$len 		nombre de mots √† garder
+	 * @param 	$ending 	caract√®res de fin
+	 * @param 	$char 		caract√®re de s√©paration
 	 * @return	string
 	 * @author	Stephane F
 	 **/
-	public static function subtok($string,$len=25,$ending='...',$chr=' ') {
+	public static function subtok($string,$len=30,$ending='...',$chr=' ') {
 		$explode=explode($chr,$string);
 		if(sizeof($explode)>$len)
 			return implode($chr,array_slice($explode,0,$len)).$ending;
 		else
-  			return implode($chr,array_slice($explode,0,$len));
+			return implode($chr,array_slice($explode,0,$len));
 	}
 
 	/**
-	 * MÈthode renseigne le meta description de l'article
+	 * M√©thode renseigne le meta description de l'article
 	 *
 	 * @return	stdio
 	 * @author	Stephane F
 	 **/
 	public function plxShowMeta() {
 
+		$nbwords = intval($this->getParam('nbwords'));
+		$nbwords = $nbwords == 0 ? 30 : $nbwords;
 		echo '<?php
 			if($this->plxMotor->mode=="article" AND strtolower($meta)=="description") {
 
@@ -61,8 +63,8 @@ class plxMyAutoMetaDescription extends plxPlugin {
 				$content=trim($this->plxMotor->plxRecord_arts->f("content"));
 				$description=strip_tags($chapo." ".$content); # suppression des balises html
 				if(!empty($description)) {
-					$description = str_replace("\"","\'",$description); # pour protÈger le champ content de la balise meta
-					$description = plxMyAutoMetaDescription::subtok($description,'.$this->getParam('nbwords').'); # on coupe
+					$description = str_replace("\"","\'",$description); # pour prot√©ger le champ content de la balise meta
+					$description = plxMyAutoMetaDescription::subtok($description,'.$nbwords.'); # on coupe
 					echo "<meta name=\"description\" content=\"".$description."\" />\n";
 					return true;
 				}
@@ -74,8 +76,6 @@ class plxMyAutoMetaDescription extends plxPlugin {
 				}
 			}
 		?>';
-
 	}
-
 }
 ?>

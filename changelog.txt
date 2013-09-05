@@ -1,1 +1,6 @@
-## Version 1.0 ##
+## Version 1.1 (05/09/2013) ##
+BUG: Messages d'erreur si le nombre de mots à utiliser n'est pas paramétré sur l'écran de configuration du plugin
+
+## Version 1.0 (27/01/2013) ##
+version initiale
+
